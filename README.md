@@ -1,16 +1,39 @@
-# MareArts XColor - Customer Repository
+# MareArts XColor
 
-Welcome to the **MareArts XColor** customer repository! This repository contains examples, tutorials, and documentation for using the `marearts-xcolor` Python package.
+**High-performance color extraction library for Python**
 
-## Installation
+[![PyPI version](https://badge.fury.io/py/marearts-xcolor.svg)](https://badge.fury.io/py/marearts-xcolor)
+[![Python Support](https://img.shields.io/pypi/pyversions/marearts-xcolor.svg)](https://pypi.org/project/marearts-xcolor/)
+[![Platform Support](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)](https://pypi.org/project/marearts-xcolor/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Install the package from PyPI:
+MareArts XColor is a powerful color extraction library that uses advanced clustering algorithms to extract dominant colors from images. It features both CPU and GPU acceleration, multiple color space support, and intelligent preprocessing for accurate color analysis.
 
+## 🚀 Installation
+
+### For CPU Users (Most Common)
 ```bash
 pip install marearts-xcolor
 ```
 
-## Quick Start
+### For GPU Users (Advanced Performance)
+```bash
+# For CUDA 11.x
+pip install marearts-xcolor[gpu] cupy-cuda11x
+
+# For CUDA 12.x  
+pip install marearts-xcolor[gpu] cupy-cuda12x
+```
+
+## 📋 Requirements
+
+- Python 3.9, 3.10, 3.11, or 3.12
+- Operating System: Windows, macOS, or Linux
+- Architecture: x86_64 or ARM64
+
+## 🎯 Quick Start
+
+### Basic Usage
 
 ```python
 from marearts_xcolor import ColorExtractor
@@ -18,52 +41,205 @@ from marearts_xcolor import ColorExtractor
 # Create extractor instance
 extractor = ColorExtractor()
 
-# Extract colors from an image
+# Extract 5 dominant colors from an image
 colors = extractor.extract_colors("your_image.jpg", num_colors=5)
 
-# Print dominant colors
+# Print results
 for color in colors:
     print(f"RGB: {color['rgb']}, Percentage: {color['percentage']:.2f}%")
 ```
 
-## Repository Structure
+### Advanced Usage with GPU
 
-- `examples/` - Complete usage examples
-- `tutorials/` - Step-by-step tutorials
-- `sample_images/` - Test images for experimentation
-- `docs/` - Additional documentation
+```python
+from marearts_xcolor import ColorExtractor
 
-## Features
+# Enable GPU acceleration (automatically falls back to CPU if unavailable)
+extractor = ColorExtractor(use_gpu='auto')
 
-- **High Performance**: Optimized Cython implementation with C++ backend
-- **Multiple Algorithms**: K-means and DBSCAN clustering support
-- **Color Space Support**: RGB, LAB, HSV color spaces
-- **Advanced Preprocessing**: CLAHE and bilateral filtering
-- **CLI Interface**: Command-line tools for batch processing
-- **Cross-Platform**: Windows, macOS, Linux support (x86_64 + ARM64)
+# Extract colors using DBSCAN clustering
+colors = extractor.extract_colors(
+    "image.jpg",
+    num_colors=7,
+    clustering_method='dbscan',
+    color_space='lab'
+)
+```
 
-## Package Information
+### Command Line Interface
 
-- **PyPI Package**: `marearts-xcolor`
-- **Python Versions**: 3.9, 3.10, 3.11, 3.12
-- **Architectures**: x86_64, ARM64
-- **License**: MIT
+```bash
+# Basic usage
+xcolor image.jpg --num-colors 5
 
-## Links
+# Advanced options
+xcolor image.jpg --num-colors 8 --method dbscan --color-space lab --gpu auto
+
+# Batch processing
+xcolor *.jpg --output results.json --gpu auto
+```
+
+## 🌟 Key Features
+
+### 🎨 Color Extraction
+- **Multiple Algorithms**: K-means and DBSCAN clustering
+- **Color Spaces**: RGB and LAB support
+- **Smart Preprocessing**: CLAHE enhancement and bilateral filtering
+- **Accurate Results**: Perceptually uniform color extraction
+
+### ⚡ Performance
+- **GPU Acceleration**: Optional CUDA support for 10-50x speedup
+- **Optimized Implementation**: Cython-compiled with C++ backend
+- **Smart Fallback**: Automatic CPU fallback when GPU unavailable
+- **Batch Processing**: Efficient processing of multiple images
+
+### 🛠️ Flexibility
+- **Pure Python API**: Easy integration with existing projects
+- **Mask Support**: Extract colors from specific regions
+- **Color Similarity**: Find similar colors using perceptual metrics
+- **Export Options**: JSON, CSV, and image outputs
+
+## 📚 Examples
+
+### Extract Colors from Product Images
+
+```python
+from marearts_xcolor import ColorExtractor
+import json
+
+extractor = ColorExtractor(use_gpu='auto')
+
+# Analyze product image
+colors = extractor.extract_colors(
+    "product.jpg",
+    num_colors=5,
+    quality='high'
+)
+
+# Save results
+with open('product_colors.json', 'w') as f:
+    json.dump(colors, f, indent=2)
+
+# Generate color palette image
+extractor.save_palette(colors, 'product_palette.png')
+```
+
+### Batch Process Multiple Images
+
+```python
+import glob
+from marearts_xcolor import ColorExtractor
+
+extractor = ColorExtractor(use_gpu='auto')
+
+# Process all images in directory
+for image_path in glob.glob("images/*.jpg"):
+    colors = extractor.extract_colors(image_path, num_colors=5)
+    print(f"\n{image_path}:")
+    for color in colors:
+        print(f"  {color['hex']} - {color['percentage']:.1f}%")
+```
+
+### Color Similarity Analysis
+
+```python
+from marearts_xcolor import ColorExtractor
+
+extractor = ColorExtractor()
+
+# Extract colors from reference image
+reference_colors = extractor.extract_colors("reference.jpg", num_colors=5)
+
+# Find similar colors in another image
+target_colors = extractor.extract_colors("target.jpg", num_colors=10)
+
+# Analyze similarity
+for ref_color in reference_colors:
+    similar = extractor.find_similar_colors(
+        ref_color['rgb'], 
+        target_colors,
+        threshold=10.0  # Delta-E threshold
+    )
+    print(f"Similar to {ref_color['hex']}: {len(similar)} colors found")
+```
+
+## 🏗️ Repository Structure
+
+```
+marearts-xcolor/
+├── examples/           # Complete code examples
+│   ├── README.md          # Examples documentation
+│   ├── basic_usage.py     # Simple color extraction
+│   ├── gpu_usage.py       # GPU acceleration examples
+│   ├── advanced_usage.py  # Advanced features
+│   ├── integration_examples.py  # Integration with other libraries
+│   └── cli_usage.sh       # Command-line examples
+└── sample_images/      # Test images
+    ├── sample_image.jpg
+    ├── product_example.jpg
+    ├── color_test_image.jpg
+    └── sample_mask.jpg
+```
+
+## 🔧 Configuration Options
+
+| Parameter | Options | Description |
+|-----------|---------|-------------|
+| `num_colors` | 1-20 | Number of colors to extract |
+| `clustering_method` | 'kmeans', 'dbscan' | Algorithm for color grouping |
+| `color_space` | 'rgb', 'lab' | Color space for analysis |
+| `quality` | 'low', 'medium', 'high' | Processing quality (speed vs accuracy) |
+| `use_gpu` | 'auto', 'force', 'never' | GPU acceleration mode |
+| `preprocessing` | True/False | Enable CLAHE enhancement and bilateral filtering |
+
+## 💡 Tips for Best Results
+
+1. **Use LAB color space** for perceptually accurate colors
+2. **Enable preprocessing** for images with poor lighting
+3. **GPU acceleration** provides significant speedup for large images
+4. **DBSCAN clustering** works better for images with distinct color regions
+5. **Higher quality** settings improve accuracy but take more time
+
+## 🐛 Troubleshooting
+
+### GPU not detected?
+```python
+# Check GPU availability
+from marearts_xcolor.gpu_utils import get_gpu_info
+print(get_gpu_info())
+```
+
+### Installation issues?
+```bash
+# For CPU-only installation
+pip install marearts-xcolor --no-deps
+pip install numpy opencv-python scikit-learn pillow matplotlib scipy
+
+# Verify installation
+python -c "import marearts_xcolor; print(marearts_xcolor.__version__)"
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 🔗 Links
 
 - [PyPI Package](https://pypi.org/project/marearts-xcolor/)
-- [Package Documentation](https://github.com/marearts/marearts-xcolor)
+- [GitHub Repository](https://github.com/marearts/marearts-xcolor)
 - [Issue Tracker](https://github.com/marearts/marearts-xcolor/issues)
+- [MareArts Homepage](https://marearts.com)
 
-## Examples
+## 📞 Support
 
-Browse the `examples/` directory for:
-- Basic color extraction
-- Advanced configuration options
-- Batch processing workflows
-- Integration with other libraries
-- Performance optimization tips
+For questions or support:
+- Open an issue on [GitHub](https://github.com/marearts/marearts-xcolor/issues)
+- Email: support@marearts.com
 
-## Support
+---
 
-For questions, bug reports, or feature requests, please use the [GitHub Issues](https://github.com/marearts/marearts-xcolor/issues).
+**Made with ❤️ by MareArts**

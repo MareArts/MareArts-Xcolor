@@ -42,7 +42,7 @@ from marearts_xcolor import ColorExtractor
 extractor = ColorExtractor()
 
 # Extract 5 dominant colors from an image
-colors = extractor.extract_colors("your_image.jpg", num_colors=5)
+colors = extractor.extract_colors("your_image.jpg")
 
 # Print results
 for color in colors:
@@ -55,25 +55,25 @@ for color in colors:
 from marearts_xcolor import ColorExtractor
 
 # Enable GPU acceleration (automatically falls back to CPU if unavailable)
-extractor = ColorExtractor(use_gpu='auto')
-
-# Extract colors using DBSCAN clustering
-colors = extractor.extract_colors(
-    "image.jpg",
-    num_colors=7,
-    clustering_method='dbscan',
-    color_space='lab'
+extractor = ColorExtractor(
+    n_colors=7,
+    algorithm='dbscan',
+    lab_space=True,
+    use_gpu='auto'
 )
+
+# Extract colors
+colors = extractor.extract_colors("image.jpg")
 ```
 
 ### Command Line Interface
 
 ```bash
 # Basic usage
-xcolor image.jpg --num-colors 5
+xcolor image.jpg --colors 5
 
 # Advanced options
-xcolor image.jpg --num-colors 8 --method dbscan --color-space lab --gpu auto
+xcolor image.jpg --colors 8 --algorithm dbscan --fast
 
 # Batch processing
 xcolor *.jpg --output results.json --gpu auto
@@ -107,21 +107,14 @@ xcolor *.jpg --output results.json --gpu auto
 from marearts_xcolor import ColorExtractor
 import json
 
-extractor = ColorExtractor(use_gpu='auto')
+extractor = ColorExtractor(n_colors=5, use_gpu='auto')
 
 # Analyze product image
-colors = extractor.extract_colors(
-    "product.jpg",
-    num_colors=5,
-    quality='high'
-)
+colors = extractor.extract_colors("product.jpg")
 
 # Save results
 with open('product_colors.json', 'w') as f:
     json.dump(colors, f, indent=2)
-
-# Generate color palette image
-extractor.save_palette(colors, 'product_palette.png')
 ```
 
 ### Batch Process Multiple Images
@@ -130,11 +123,11 @@ extractor.save_palette(colors, 'product_palette.png')
 import glob
 from marearts_xcolor import ColorExtractor
 
-extractor = ColorExtractor(use_gpu='auto')
+extractor = ColorExtractor(n_colors=5, use_gpu='auto')
 
 # Process all images in directory
 for image_path in glob.glob("images/*.jpg"):
-    colors = extractor.extract_colors(image_path, num_colors=5)
+    colors = extractor.extract_colors(image_path)
     print(f"\n{image_path}:")
     for color in colors:
         print(f"  {color['hex']} - {color['percentage']:.1f}%")
@@ -145,13 +138,13 @@ for image_path in glob.glob("images/*.jpg"):
 ```python
 from marearts_xcolor import ColorExtractor
 
-extractor = ColorExtractor()
-
 # Extract colors from reference image
-reference_colors = extractor.extract_colors("reference.jpg", num_colors=5)
+extractor_ref = ColorExtractor(n_colors=5)
+reference_colors = extractor_ref.extract_colors("reference.jpg")
 
-# Find similar colors in another image
-target_colors = extractor.extract_colors("target.jpg", num_colors=10)
+# Extract more colors from target image
+extractor_target = ColorExtractor(n_colors=10)
+target_colors = extractor_target.extract_colors("target.jpg")
 
 # Analyze similarity
 for ref_color in reference_colors:
@@ -185,10 +178,9 @@ marearts-xcolor/
 
 | Parameter | Options | Description |
 |-----------|---------|-------------|
-| `num_colors` | 1-20 | Number of colors to extract |
-| `clustering_method` | 'kmeans', 'dbscan' | Algorithm for color grouping |
-| `color_space` | 'rgb', 'lab' | Color space for analysis |
-| `quality` | 'low', 'medium', 'high' | Processing quality (speed vs accuracy) |
+| `n_colors` | int (e.g., 1-20) | Number of colors to extract |
+| `algorithm` | 'kmeans', 'dbscan' | Clustering algorithm |
+| `lab_space` | True/False | Use LAB color space (True) or RGB (False) |
 | `use_gpu` | 'auto', 'force', 'never' | GPU acceleration mode |
 | `preprocessing` | True/False | Enable CLAHE enhancement and bilateral filtering |
 
@@ -198,7 +190,6 @@ marearts-xcolor/
 2. **Enable preprocessing** for images with poor lighting
 3. **GPU acceleration** provides significant speedup for large images
 4. **DBSCAN clustering** works better for images with distinct color regions
-5. **Higher quality** settings improve accuracy but take more time
 
 ## 🐛 Troubleshooting
 

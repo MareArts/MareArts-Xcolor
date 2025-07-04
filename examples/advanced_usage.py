@@ -16,15 +16,16 @@ def performance_comparison():
     
     image_path = "../sample_images/product_example.jpg"
     
-    # Test different quality settings
-    for quality in ['low', 'medium', 'high']:
-        extractor = ColorExtractor()
+    # Test different preprocessing settings
+    for preprocessing in [False, True]:
+        extractor = ColorExtractor(n_colors=5, preprocessing=preprocessing)
         
         start_time = time.time()
-        colors = extractor.extract_colors(image_path, num_colors=5, quality=quality)
+        colors = extractor.extract_colors(image_path)
         elapsed_time = time.time() - start_time
         
-        print(f"\nQuality: {quality}")
+        mode = "With preprocessing" if preprocessing else "No preprocessing"
+        print(f"\n{mode}:")
         print(f"  Time: {elapsed_time:.3f} seconds")
         print(f"  Colors found: {len(colors)}")
 
@@ -32,10 +33,10 @@ def color_distribution_analysis():
     """Analyze color distribution in image"""
     print("\n=== Color Distribution Analysis ===")
     
-    extractor = ColorExtractor(lab_space=True)
+    extractor = ColorExtractor(n_colors=8, lab_space=True)
     
     image_path = "../sample_images/color_test_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=8)
+    colors = extractor.extract_colors(image_path)
     
     # Analyze distribution
     total_percentage = sum(color['percentage'] for color in colors)
@@ -64,10 +65,10 @@ def color_harmony_detection():
     """Detect color harmonies in extracted colors"""
     print("\n=== Color Harmony Detection ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=6)
     
     image_path = "../sample_images/sample_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=6)
+    colors = extractor.extract_colors(image_path)
     
     # Convert to HSV for harmony analysis
     hsv_colors = []
@@ -105,7 +106,7 @@ def multi_image_color_comparison():
     """Compare colors across multiple images"""
     print("\n=== Multi-Image Color Comparison ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=3)
     
     # Extract colors from multiple images
     image_files = list(Path("../sample_images").glob("*.jpg"))
@@ -113,7 +114,7 @@ def multi_image_color_comparison():
     
     all_colors = {}
     for image_file in image_files:
-        colors = extractor.extract_colors(str(image_file), num_colors=3)
+        colors = extractor.extract_colors(str(image_file))
         all_colors[image_file.name] = colors
     
     # Find common colors across images
@@ -144,12 +145,12 @@ def create_color_report():
     results = {}
     
     # K-means analysis
-    kmeans_extractor = ColorExtractor(algorithm='kmeans', preprocessing=True)
-    kmeans_colors = kmeans_extractor.extract_colors(image_path, num_colors=5)
+    kmeans_extractor = ColorExtractor(n_colors=5, algorithm='kmeans', preprocessing=True)
+    kmeans_colors = kmeans_extractor.extract_colors(image_path)
     
     # DBSCAN analysis
-    dbscan_extractor = ColorExtractor(algorithm='dbscan', preprocessing=True)
-    dbscan_colors = dbscan_extractor.extract_colors(image_path, num_colors=5)
+    dbscan_extractor = ColorExtractor(n_colors=5, algorithm='dbscan', preprocessing=True)
+    dbscan_colors = dbscan_extractor.extract_colors(image_path)
     
     # Prepare report
     report = {
@@ -214,8 +215,8 @@ def custom_preprocessing_example():
     cv2.imwrite("preprocessed_image.jpg", cv2.cvtColor(enhanced_rgb, cv2.COLOR_RGB2BGR))
     
     # Extract colors from preprocessed image
-    extractor = ColorExtractor(preprocessing=False)  # Already preprocessed
-    colors = extractor.extract_colors("preprocessed_image.jpg", num_colors=5)
+    extractor = ColorExtractor(n_colors=5, preprocessing=False)  # Already preprocessed
+    colors = extractor.extract_colors("preprocessed_image.jpg")
     
     print("\nColors from custom preprocessed image:")
     for color in colors:
@@ -225,10 +226,10 @@ def color_palette_export():
     """Export color palettes in various formats"""
     print("\n=== Color Palette Export ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=6)
     
     image_path = "../sample_images/color_test_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=6)
+    colors = extractor.extract_colors(image_path)
     
     # Export as different formats
     

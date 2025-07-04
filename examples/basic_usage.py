@@ -16,7 +16,7 @@ def basic_color_extraction():
     
     # Extract colors from image
     image_path = "../sample_images/sample_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=5)
+    colors = extractor.extract_colors(image_path)
     
     # Display results
     print(f"\nExtracted {len(colors)} dominant colors:")
@@ -33,12 +33,12 @@ def extraction_with_preprocessing():
     image_path = "../sample_images/product_example.jpg"
     
     # Without preprocessing
-    extractor_no_prep = ColorExtractor(preprocessing=False)
-    colors_no_prep = extractor_no_prep.extract_colors(image_path, num_colors=5)
+    extractor_no_prep = ColorExtractor(n_colors=5, preprocessing=False)
+    colors_no_prep = extractor_no_prep.extract_colors(image_path)
     
     # With preprocessing (default)
-    extractor_prep = ColorExtractor(preprocessing=True)
-    colors_prep = extractor_prep.extract_colors(image_path, num_colors=5)
+    extractor_prep = ColorExtractor(n_colors=5, preprocessing=True)
+    colors_prep = extractor_prep.extract_colors(image_path)
     
     print("\nWithout preprocessing:")
     for color in colors_no_prep[:3]:
@@ -55,12 +55,12 @@ def different_clustering_methods():
     image_path = "../sample_images/color_test_image.jpg"
     
     # K-means clustering
-    kmeans_extractor = ColorExtractor(algorithm='kmeans')
-    kmeans_colors = kmeans_extractor.extract_colors(image_path, num_colors=5)
+    kmeans_extractor = ColorExtractor(n_colors=5, algorithm='kmeans')
+    kmeans_colors = kmeans_extractor.extract_colors(image_path)
     
     # DBSCAN clustering
-    dbscan_extractor = ColorExtractor(algorithm='dbscan')
-    dbscan_colors = dbscan_extractor.extract_colors(image_path, num_colors=5)
+    dbscan_extractor = ColorExtractor(n_colors=5, algorithm='dbscan')
+    dbscan_colors = dbscan_extractor.extract_colors(image_path)
     
     print("\nK-means results (good for uniform distribution):")
     for color in kmeans_colors:
@@ -77,12 +77,12 @@ def color_space_comparison():
     image_path = "../sample_images/sample_image.jpg"
     
     # RGB color space
-    rgb_extractor = ColorExtractor(lab_space=False)
-    rgb_colors = rgb_extractor.extract_colors(image_path, num_colors=5)
+    rgb_extractor = ColorExtractor(n_colors=5, lab_space=False)
+    rgb_colors = rgb_extractor.extract_colors(image_path)
     
     # LAB color space (perceptually uniform)
-    lab_extractor = ColorExtractor(lab_space=True)
-    lab_colors = lab_extractor.extract_colors(image_path, num_colors=5)
+    lab_extractor = ColorExtractor(n_colors=5, lab_space=True)
+    lab_colors = lab_extractor.extract_colors(image_path)
     
     print("\nRGB color space:")
     for color in rgb_colors[:3]:
@@ -96,7 +96,7 @@ def extraction_with_mask():
     """Extract colors from specific regions using mask"""
     print("\n=== Masked Color Extraction ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=5)
     
     # Extract colors from masked region
     image_path = "../sample_images/product_example.jpg"
@@ -104,8 +104,7 @@ def extraction_with_mask():
     
     colors = extractor.extract_colors(
         image_path=image_path,
-        mask_path=mask_path,
-        num_colors=5
+        mask_path=mask_path
     )
     
     print(f"\nColors from masked region only:")
@@ -116,14 +115,14 @@ def batch_processing():
     """Process multiple images efficiently"""
     print("\n=== Batch Processing ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=3)
     results = {}
     
     # Process all images in directory
     image_dir = Path("../sample_images")
     for image_file in image_dir.glob("*.jpg"):
         if "mask" not in image_file.name:  # Skip mask files
-            colors = extractor.extract_colors(str(image_file), num_colors=3)
+            colors = extractor.extract_colors(str(image_file))
             results[image_file.name] = colors
             
             print(f"\n{image_file.name}:")
@@ -139,11 +138,11 @@ def save_color_palette():
     """Save extracted colors as palette image"""
     print("\n=== Save Color Palette ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=6)
     
     # Extract colors
     image_path = "../sample_images/sample_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=6)
+    colors = extractor.extract_colors(image_path)
     
     # Save palette image
     output_path = "extracted_palette.png"
@@ -161,20 +160,20 @@ def quality_settings():
     
     image_path = "../sample_images/product_example.jpg"
     
-    # Low quality - fast
-    low_extractor = ColorExtractor()
-    low_colors = low_extractor.extract_colors(image_path, quality='low', num_colors=5)
+    # Without preprocessing - faster
+    fast_extractor = ColorExtractor(n_colors=5, preprocessing=False)
+    fast_colors = fast_extractor.extract_colors(image_path)
     
-    # High quality - accurate
-    high_extractor = ColorExtractor()
-    high_colors = high_extractor.extract_colors(image_path, quality='high', num_colors=5)
+    # With preprocessing - more accurate
+    accurate_extractor = ColorExtractor(n_colors=5, preprocessing=True)
+    accurate_colors = accurate_extractor.extract_colors(image_path)
     
-    print("\nLow quality (fast):")
-    for color in low_colors[:3]:
+    print("\nFast mode (no preprocessing):")
+    for color in fast_colors[:3]:
         print(f"  {color['hex']} - {color['percentage']:.1f}%")
     
-    print("\nHigh quality (more accurate):")
-    for color in high_colors[:3]:
+    print("\nAccurate mode (with preprocessing):")
+    for color in accurate_colors[:3]:
         print(f"  {color['hex']} - {color['percentage']:.1f}%")
 
 if __name__ == "__main__":

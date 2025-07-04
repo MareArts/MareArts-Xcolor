@@ -15,11 +15,11 @@ def matplotlib_visualization():
     """Create visualizations using matplotlib"""
     print("=== Matplotlib Integration ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=6)
     
     # Extract colors
     image_path = "../sample_images/sample_image.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=6)
+    colors = extractor.extract_colors(image_path)
     
     # Create pie chart of color distribution
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
@@ -48,7 +48,7 @@ def pillow_palette_generation():
     """Generate color palettes using PIL/Pillow"""
     print("\n=== Pillow Integration ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=5)
     
     # Extract colors from multiple images
     images = ["sample_image.jpg", "product_example.jpg", "color_test_image.jpg"]
@@ -63,7 +63,7 @@ def pillow_palette_generation():
     
     for img_idx, image_name in enumerate(images):
         image_path = f"../sample_images/{image_name}"
-        colors = extractor.extract_colors(image_path, num_colors=5)
+        colors = extractor.extract_colors(image_path)
         
         y_offset = img_idx * palette_height
         
@@ -94,14 +94,14 @@ def pandas_color_analysis():
     """Analyze colors using pandas DataFrame"""
     print("\n=== Pandas Integration ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=5)
     
     # Collect color data from multiple images
     data = []
     
     for image_file in Path("../sample_images").glob("*.jpg"):
         if "mask" not in image_file.name:
-            colors = extractor.extract_colors(str(image_file), num_colors=5)
+            colors = extractor.extract_colors(str(image_file))
             
             for rank, color in enumerate(colors, 1):
                 data.append({
@@ -139,10 +139,10 @@ def web_color_scheme_generator():
     """Generate web color schemes"""
     print("\n=== Web Color Scheme Generator ===")
     
-    extractor = ColorExtractor()
+    extractor = ColorExtractor(n_colors=6)
     
     image_path = "../sample_images/product_example.jpg"
-    colors = extractor.extract_colors(image_path, num_colors=6)
+    colors = extractor.extract_colors(image_path)
     
     # Generate color scheme
     scheme = {
@@ -198,12 +198,11 @@ def json_api_response():
     """Simulate API response format"""
     print("\n=== JSON API Response Format ===")
     
-    extractor = ColorExtractor()
-    
     # Simulate API endpoint
-    def color_extraction_api(image_path, **kwargs):
+    def color_extraction_api(image_path, n_colors=5, **kwargs):
         try:
-            colors = extractor.extract_colors(image_path, **kwargs)
+            extractor = ColorExtractor(n_colors=n_colors, **kwargs)
+            colors = extractor.extract_colors(image_path)
             
             response = {
                 'status': 'success',
@@ -233,15 +232,15 @@ def json_api_response():
     # Successful extraction
     response1 = color_extraction_api(
         "../sample_images/sample_image.jpg",
-        num_colors=5,
-        quality='high'
+        n_colors=5,
+        preprocessing=True
     )
     responses.append(response1)
     
     # With preprocessing disabled
     response2 = color_extraction_api(
         "../sample_images/product_example.jpg",
-        num_colors=3,
+        n_colors=3,
         preprocessing=False
     )
     responses.append(response2)
@@ -258,15 +257,12 @@ def batch_processing_pipeline():
     """Create a batch processing pipeline"""
     print("\n=== Batch Processing Pipeline ===")
     
-    extractor = ColorExtractor()
-    
     # Pipeline configuration
     pipeline_config = {
         'input_dir': '../sample_images',
         'output_dir': 'batch_output',
         'settings': {
-            'num_colors': 5,
-            'quality': 'medium',
+            'n_colors': 5,
             'preprocessing': True
         }
     }
@@ -283,10 +279,8 @@ def batch_processing_pipeline():
             print(f"Processing: {image_file.name}")
             
             # Extract colors
-            colors = extractor.extract_colors(
-                str(image_file),
-                **pipeline_config['settings']
-            )
+            extractor = ColorExtractor(**pipeline_config['settings'])
+            colors = extractor.extract_colors(str(image_file))
             
             # Save individual result
             result = {

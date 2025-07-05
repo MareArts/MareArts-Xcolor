@@ -4,6 +4,7 @@
 
 [![PyPI version](https://badge.fury.io/py/marearts-xcolor.svg)](https://badge.fury.io/py/marearts-xcolor)
 [![Python Support](https://img.shields.io/pypi/pyversions/marearts-xcolor.svg)](https://pypi.org/project/marearts-xcolor/)
+[![Downloads](https://pepy.tech/badge/marearts-xcolor)](https://pepy.tech/project/marearts-xcolor)
 [![Platform Support](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)](https://pypi.org/project/marearts-xcolor/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

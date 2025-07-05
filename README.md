@@ -222,13 +222,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - [PyPI Package](https://pypi.org/project/marearts-xcolor/)
 - [GitHub Repository](https://github.com/marearts/marearts-xcolor)
-- [Issue Tracker](https://github.com/marearts/marearts-xcolor/issues)
 - [MareArts Homepage](https://marearts.com)
 
 ## 📞 Support
 
 For questions or support:
-- Open an issue on [GitHub](https://github.com/marearts/marearts-xcolor/issues)
 - Email: support@marearts.com
 
 ---

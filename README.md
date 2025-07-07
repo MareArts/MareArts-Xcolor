@@ -161,12 +161,14 @@ for ref_color in reference_colors:
 ```
 marearts-xcolor/
 ├── examples/           # Complete code examples
-│   ├── README.md          # Examples documentation
-│   ├── basic_usage.py     # Simple color extraction
-│   ├── gpu_usage.py       # GPU acceleration examples
-│   ├── advanced_usage.py  # Advanced features
+│   ├── README.md                # Examples documentation
+│   ├── basic_usage.py           # Simple color extraction
+│   ├── gpu_usage.py             # GPU acceleration examples
+│   ├── advanced_usage.py        # Advanced features
 │   ├── integration_examples.py  # Integration with other libraries
-│   └── cli_usage.sh       # Command-line examples
+│   ├── webcam_color_extractor.py # Real-time webcam demo
+│   ├── advanced_webcam_demo.py  # Webcam demo with video recording
+│   └── cli_usage.sh             # Command-line examples
 └── sample_images/      # Test images
     ├── sample_image.jpg
     ├── product_example.jpg
@@ -227,7 +229,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📞 Support
 
 For questions or support:
-- Email: support@marearts.com
+- Email: hello@marearts.com
 
 ---
 

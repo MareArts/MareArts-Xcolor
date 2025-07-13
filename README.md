@@ -224,6 +224,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [PyPI Package](https://pypi.org/project/marearts-xcolor/)
 - [GitHub Repository](https://github.com/marearts/marearts-xcolor)
 - [MareArts Homepage](https://marearts.com)
+- [Live Test](https://live.marearts.com)
+
+## MareArts Solutions
+- [Autpmatic Number Plate Recognition](https://github.com/MareArts/MareArts-ANPR)
+- [MareArts Reatime Video & Image Stiching](https://github.com/MareArts/MareArts-MAST)
+- [MareArts Dominent Color Extraction](https://github.com/marearts/marearts-xcolor)
 
 ## 📞 Support
 

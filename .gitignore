@@ -24,9 +24,16 @@ parts/
 sdist/
 var/
 wheels/
+experiments/
+
+# Claude related files
+CLAUDE.md
+.claude/
+claude.md
 *.egg-info/
 .installed.cfg
 *.egg
+*.mp4
 
 # IDE
 .idea/

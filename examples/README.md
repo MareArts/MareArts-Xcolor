@@ -49,6 +49,24 @@ Command-line interface examples:
 - Batch processing
 - Output formats
 
+### 6. **webcam_color_extractor.py** 🎥
+Real-time webcam color extraction demo:
+- Live color analysis from webcam feed
+- Interactive circular ROI selection
+- Professional UI with real-time color table
+- Anti-aliased graphics and smooth performance
+- MareArts-Xcolor branding and installation promotion
+- Mirror-effect video for natural interaction
+
+### 7. **advanced_webcam_demo.py** 🎬
+Advanced webcam demo with video recording:
+- All features from webcam_color_extractor.py
+- High-quality HD video recording (1280x720, 30fps)
+- Automatic 30-second video segments
+- Recording indicators and segment timers
+- Command-line recording controls
+- Perfect for creating promotional videos and social media content
+
 ## 🚀 Running the Examples
 
 ### Prerequisites
@@ -61,6 +79,9 @@ pip install marearts-xcolor[gpu]
 
 # For integration examples
 pip install matplotlib pandas pillow
+
+# For webcam demo
+pip install opencv-python
 ```
 
 ### Running Individual Examples
@@ -81,6 +102,12 @@ python integration_examples.py
 
 # Run CLI examples
 bash cli_usage.sh
+
+# Run webcam demo (requires camera)
+python webcam_color_extractor.py
+
+# Run advanced webcam demo with video recording
+python advanced_webcam_demo.py --record
 ```
 
 ## 📊 Example Output
@@ -91,6 +118,7 @@ Each example creates various output files:
 - **CSV files**: Tabular color data for analysis
 - **CSS/SCSS files**: Web-ready color variables
 - **Visualizations**: Charts and graphs of color distribution
+- **Video recordings**: HD MP4 files for demonstrations (advanced_webcam_demo.py)
 
 ## 💡 Tips
 
@@ -99,6 +127,8 @@ Each example creates various output files:
 3. **Customize**: Modify examples to fit your specific use case
 4. **Performance**: Use quality settings appropriate for your needs
 5. **Integration**: See `integration_examples.py` for working with other tools
+6. **Webcam Demo**: Run `webcam_color_extractor.py` for an impressive real-time demonstration
+7. **Video Recording**: Use `advanced_webcam_demo.py --record` to create promotional videos
 
 ## 🔍 Common Use Cases
 
@@ -124,11 +154,25 @@ for image in images:
     colors = extractor.extract_colors(image, quality='medium')
 ```
 
+### Real-time Webcam Analysis
+```python
+# Live color extraction from webcam
+python webcam_color_extractor.py
+# Features professional UI with real-time updates
+
+# Advanced demo with video recording
+python advanced_webcam_demo.py --record --colors 7
+# Creates HD video segments for promotional content
+```
+
 ## 📝 Notes
 
 - All examples use relative paths assuming you're in the `examples/` directory
 - Sample images are provided in the `sample_images/` directory
 - GPU examples will automatically fall back to CPU if GPU is not available
+- Webcam demo requires a connected camera and camera permissions
+- Advanced webcam demo creates video files in the current directory
+- Video recording uses significant disk space (HD quality)
 - Modify parameters to experiment with different settings
 
 ## 🤝 Contributing
